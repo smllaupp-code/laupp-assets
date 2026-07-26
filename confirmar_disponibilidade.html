@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Confirme a disponibilidade do seu imóvel</title>
+<style>
+  :root {
+    --terracota: #B75B39;
+    --terracota-escuro: #A34E30;
+    --verde: #25D366;
+    --verde-escuro: #128C7E;
+    --cinza: #6B7280;
+    --cinza-escuro: #545961;
+    --fundo: #EFEAE2;
+    --texto: #1F2A32;
+    --texto-suave: #6B7280;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background: var(--fundo);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+  .cartao {
+    background: #FFFFFF;
+    border-top: 4px solid var(--terracota);
+    border-radius: 12px;
+    max-width: 440px;
+    width: 100%;
+    padding: 40px 32px;
+    box-shadow: 0 4px 24px rgba(31,42,50,0.08);
+    text-align: center;
+  }
+  .selo {
+    width: 64px; height: 64px; border-radius: 50%;
+    margin: 0 auto 20px auto; display: block; object-fit: cover;
+  }
+  h1 {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 22px;
+    color: var(--texto);
+    margin: 0 0 8px 0;
+  }
+  .subtitulo {
+    color: var(--texto-suave);
+    font-size: 15px;
+    margin: 0 0 32px 0;
+    line-height: 1.5;
+  }
+  .subtitulo strong { color: var(--texto); }
+  .botao {
+    display: block;
+    width: 100%;
+    padding: 16px 20px;
+    border-radius: 10px;
+    border: none;
+    font-size: 16px;
+    font-weight: 700;
+    text-decoration: none;
+    cursor: pointer;
+    margin-bottom: 14px;
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
+  }
+  .botao:active { transform: scale(0.98); }
+  .botao-manter {
+    background: var(--verde);
+    color: #ffffff;
+  }
+  .botao-manter:hover { background: var(--verde-escuro); }
+  .botao-remover {
+    background: #F3F1EC;
+    color: var(--cinza-escuro);
+    border: 1px solid #E2DCD0;
+  }
+  .botao-remover:hover { background: #E9E4D9; }
+  .rodape {
+    margin-top: 24px;
+    font-size: 12px;
+    color: #A39E96;
+  }
+  .estado {
+    display: none;
+  }
+  .estado.ativo { display: block; }
+  .icone-confirmado {
+    width: 56px; height: 56px; border-radius: 50%;
+    background: var(--verde);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 20px auto;
+    color: #fff; font-size: 28px;
+  }
+</style>
+</head>
+<body>
+
+  <div class="cartao">
+
+    <div id="pergunta" class="estado ativo">
+      <img class="selo" src="https://raw.githubusercontent.com/smllaupp-code/laupp-assets/main/foto_samuel_circular.png" alt="Samuel Laupp">
+      <h1>Seu imóvel ainda está à venda?</h1>
+      <p class="subtitulo">Imóvel em <strong id="nomeBairro">sua região</strong>. Confirma abaixo, leva 2 segundos.</p>
+
+      <button class="botao botao-manter" onclick="confirmar('manter')">
+        ✅ Sim, ainda à venda — manter
+      </button>
+      <button class="botao botao-remover" onclick="confirmar('remover')">
+        ❌ Já vendi — remover anúncio
+      </button>
+
+      <p class="rodape">Samuel Laupp · Creci 200890 · Corretor em Praia Grande</p>
+    </div>
+
+    <div id="confirmado_manter" class="estado">
+      <div class="icone-confirmado">✓</div>
+      <h1>Anúncio mantido!</h1>
+      <p class="subtitulo">Obrigado por confirmar. Seu imóvel continua ativo no ImovelWeb, ZAP, OLX, VivaReal e demais portais parceiros.</p>
+      <a class="botao botao-manter" href="" id="linkWhatsappManter">💬 Falar com o Samuel no WhatsApp</a>
+    </div>
+
+    <div id="confirmado_remover" class="estado">
+      <div class="icone-confirmado">✓</div>
+      <h1>Combinado!</h1>
+      <p class="subtitulo">Parabéns pela venda! Vou remover o anúncio do ImovelWeb, ZAP, OLX, VivaReal e demais portais em até 24h.</p>
+      <a class="botao botao-manter" href="" id="linkWhatsappRemover">💬 Falar com o Samuel no WhatsApp</a>
+    </div>
+
+  </div>
+
+<script>
+  var params = new URLSearchParams(window.location.search);
+  var bairro = params.get('bairro') || 'sua região';
+  var nome = params.get('nome') || '';
+  document.getElementById('nomeBairro').textContent = bairro;
+
+  function confirmar(tipo) {
+    document.getElementById('pergunta').classList.remove('ativo');
+    if (tipo === 'manter') {
+      document.getElementById('confirmado_manter').classList.add('ativo');
+      document.getElementById('linkWhatsappManter').href =
+        'https://wa.me/5513981823465?text=' + encodeURIComponent('Oi Samuel, confirmei: meu imóvel em ' + bairro + ' continua à venda.');
+    } else {
+      document.getElementById('confirmado_remover').classList.add('ativo');
+      document.getElementById('linkWhatsappRemover').href =
+        'https://wa.me/5513981823465?text=' + encodeURIComponent('Oi Samuel, já vendi meu imóvel em ' + bairro + '. Pode remover o anúncio.');
+    }
+  }
+</script>
+
+</body>
+</html>
